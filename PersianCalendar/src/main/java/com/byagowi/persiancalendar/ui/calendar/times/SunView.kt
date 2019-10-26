@@ -167,14 +167,11 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
 
         mDayPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mDayPaint.style = Paint.Style.FILL_AND_STROKE
+
+        sizeChangeAction()
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
-        super.onSizeChanged(w, h, oldW, oldH)
-
-        width = w
-        height = h - 18
-
+    private fun sizeChangeAction() {
         curvePath = Path()
         curvePath.moveTo(0f, height.toFloat())
 
@@ -191,6 +188,15 @@ class SunView : View, ValueAnimator.AnimatorUpdateListener {
         nightPath.lineTo(width.toFloat(), 0f)
         nightPath.lineTo(0f, 0f)
         nightPath.close()
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
+        super.onSizeChanged(w, h, oldW, oldH)
+
+        width = w
+        height = h - 18
+
+        sizeChangeAction()
     }
 
     // https://stackoverflow.com/a/34763668

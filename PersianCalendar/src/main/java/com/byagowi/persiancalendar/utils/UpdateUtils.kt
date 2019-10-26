@@ -25,6 +25,14 @@ import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import java.util.*
 import java.util.concurrent.TimeUnit.MINUTES
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.view.ViewGroup
+import com.byagowi.persiancalendar.ui.calendar.times.SunView
+import com.cepmuvakkit.times.posAlgo.SunMoonPosition
+import io.github.persiancalendar.praytimes.PrayTimesCalculator
+
 
 private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
@@ -72,6 +80,40 @@ fun update(context: Context, updateDate: Boolean) {
     val widget4x1 = ComponentName(context, Widget4x1::class.java)
     val widget4x2 = ComponentName(context, Widget4x2::class.java)
     val widget2x2 = ComponentName(context, Widget2x2::class.java)
+    val widgetSunView = ComponentName(context, WidgetSunView::class.java)
+
+    if (manager.getAppWidgetIds(widgetSunView)?.isNotEmpty() == true) {
+        RemoteViews(context.packageName, R.layout.widget_sunview).apply {
+            val sunView = SunView(context)
+            sunView.layoutParams = ViewGroup.LayoutParams(800, 800)
+            sunView.layout(sunView.left, sunView.top, sunView.right, sunView.bottom)
+
+            val b = Bitmap.createBitmap(400, 400, Bitmap.Config.ARGB_8888)
+            val c = Canvas(b)
+
+//            getCoordinate(context)?.run {
+//                val moonPhase = SunMoonPosition(getTodayJdn().toDouble(), latitude,
+//                    longitude, .0, .0).moonPhase
+//                val prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), Date(), coordinate)
+//                sunView.setSunriseSunsetMoonPhase(prayTimes, moonPhase)
+//            }
+//            sunView.draw(c)
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+            paint.color = Color.RED
+            paint.style = Paint.Style.FILL
+            c.drawRect(0f, 0f, 100f, 100f, paint)
+
+
+            setTextColor(R.id.setLocation, color);
+//            setViewVisibility(R.id.setLocation, coordinate == null ? View.VISIBLE : View.GONE);
+//            setViewVisibility(R.id.sunView, coordinate == null ? View.GONE : View.VISIBLE);
+            setImageViewBitmap(R.id.sunView, b)
+            setBackgroundColor(this, R.id.widget_sunview)
+            setContentDescription(R.id.sunView, sunView.contentDescription)
+            setOnClickPendingIntent(R.id.widget_sunview, launchAppPendingIntent)
+            manager.updateAppWidget(widgetSunView, this)
+        }
+    }
 
     if (manager.getAppWidgetIds(widget1x1)?.isNotEmpty() == true) {
         RemoteViews(context.packageName, R.layout.widget1x1).apply {
