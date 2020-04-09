@@ -19,6 +19,7 @@ import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
@@ -212,7 +213,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             settingHasChanged = false // reset for the next time
         }
 
-        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(id, null, null)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
+        navHostFragment?.navController?.navigate(id, null, null)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
